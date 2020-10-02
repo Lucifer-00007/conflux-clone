@@ -1,5 +1,5 @@
 from telethon import TelegramClient, events
-from settings import TELEGRAM_API_ID, TELEGRAM_API_HASH, COMBINATIONS, BLACKLISTS, WHITELISTS
+from settings import TELEGRAM_API_ID, TELEGRAM_API_HASH, COMBINATIONS
 
 client = TelegramClient('session', api_id=TELEGRAM_API_ID, api_hash=TELEGRAM_API_HASH)
 
@@ -13,13 +13,15 @@ async def handle_new_message(event):
         msg_text = event.raw_text
         # check if message has any blacklisted word
         contains_blacklisted_word = False
-        for word in BLACKLISTS:
+        blacklisted_words = COMBINATIONS.get(sender_chat_id).get("blacklists")
+        for word in blacklisted_words:
             if word in msg_text:
                 contains_blacklisted_word = True
 
         # check if message has any whitelisted word
         contains_whitelisted_word = False
-        for word in WHITELISTS:
+        whitelisted_words = COMBINATIONS.get(sender_chat_id).get("whitelists")
+        for word in whitelisted_words:
             if word in msg_text:
                 contains_whitelisted_word = True
 
@@ -28,7 +30,7 @@ async def handle_new_message(event):
         if not contains_blacklisted_word and contains_whitelisted_word:
 
             # send the message to destination chat
-            destination_chat_ids = COMBINATIONS.get(sender_chat_id, [])
+            destination_chat_ids = COMBINATIONS.get(sender_chat_id).get("destinations")
             for chat_id in destination_chat_ids:
                 await client.send_message(chat_id, event.raw_text)
 
