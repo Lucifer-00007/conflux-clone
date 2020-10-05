@@ -9,7 +9,7 @@
 git clone https://github.com/Ak4zh/conflux-clone
 ```
 2. Change directory to the project directory ```cd conflux-clone```
-3. Install the requirements ```pip install requirements.txt```
+3. Install the requirements ```pip install -r requirements.txt```
 
 4. Create a new file ```.env``` inside the project directory.
 5. Now add your API_ID and API_HASH obtained from https://my.telegram.org/apps
